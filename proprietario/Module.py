@@ -1,4 +1,4 @@
-
+import Database
 
 
 class Proprietario:
@@ -7,6 +7,9 @@ class Proprietario:
          self.age = age
          self.email = email
          self.password = password
+         Database.dump(self, 'proprietario')
+
+
 
 
 
