@@ -2,8 +2,9 @@ import Database
 
 
 #esempio di controller
-class Controller:
+class Controller_Admin:
     def __init__(self):
+        self.controller = Controller_Admin() #non ha senso
     def vedere_utente(utente):
             return print(utente)
 

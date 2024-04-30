@@ -1,7 +1,7 @@
 import Database
 
 
-class Proprietario:
+class Module_Admin:
     def __init__(self, name, age, email, password):
          self.name = name
          self.age = age
