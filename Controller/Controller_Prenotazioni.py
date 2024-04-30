@@ -1,3 +1,5 @@
+import pickle
+
 import Model.Model_Prenotazioni
 import Database
 from Model import Model_Prenotazioni
@@ -9,14 +11,22 @@ class Controller_Prenotazioni():
 
 
 
-    def read_prenotazioni(self):
-        Model.Model_Prenotazioni.Model_Prenotazioni.data = Database.load(Database, 'data')
-        Model.Model_Prenotazioni.Model_Prenotazioni.parruchiere = Database.load(Database, 'parruchiere')
-        Model.Model_Prenotazioni.Model_Prenotazioni.taglio = Database.load(Database, 'taglio')
+    def read_prenotazioni(self):  # apre il file prenotazioni che viene poi scritto su self.prenotazioni che viene poi printato
+        with open('Prenotazioni', 'rb') as f:
+            self.prenotazioni= pickle.load(f)
+            return print(self.prenotazioni)
 
-    def search_prenotazioni(self, prenotazioni):
-        Database.Database.load(prenotazioni) # sbagliato
-    def change_prenotazioni(self, prenotazioni):
-        Controller_Prenotazioni.search_prenotazioni(prenotazioni)
-        Model.Model_Prenotazioni.Model_Prenotazioni.data = input("Inserisci un prenotazione: ")
-        Database.Database.dump(Model.Model_Prenotazioni.Model_Prenotazioni.data, 'data')
+
+    def search_prenotazioni(self, username):  # cerca nel file prenotazioni un username e se lotrova stampa la prenotazione
+        with open('Prenotazioni', 'rb') as f:
+            self.prenotazioni= pickle.load(f)
+            if Model_Prenotazioni.Model_Prenotazioni.username == username:
+                return print(Model_Prenotazioni.Model_Prenotazioni.__str__())
+
+    def change_prenotazioni(self, username):
+        with open('Prenotazioni', 'rb') as f:
+            self.prenotazioni = pickle.load(f)
+            if Model_Prenotazioni.Model_Prenotazioni.username == username: #ci devo ragionare su
+                return print("bella")
+
+

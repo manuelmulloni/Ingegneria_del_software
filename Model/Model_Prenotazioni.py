@@ -11,3 +11,7 @@ class Model_Prenotazioni():
         self.taglio = taglio
         Database.dump(self) #metododa vedere
 
+
+
+    def __str__(self):
+        return f'{self.username} {self.data} {self.parruchiere} {self.taglio}'
