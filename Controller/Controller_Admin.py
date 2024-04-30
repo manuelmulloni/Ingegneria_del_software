@@ -4,9 +4,9 @@ import Database
 #esempio di controller
 class Controller_Admin:
     def __init__(self):
-        self.controller = Controller_Admin() #non ha senso
+        self.controller = Database()#non ha senso
     def vedere_utente(utente):
-            return print(utente)
+        return print(utente)
 
     def change_utente(utente):
         #importare da database metodo che cambia il file
