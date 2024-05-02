@@ -1,27 +1,29 @@
-import Model.Model_Utente
 
+import Database
+import pickle
 
 
 class Controller_Utente:
     def __init__(self):
-        self.Controller_Utente = []
+        self.lista_Utente = []
 
-    def vedere_utente(Module_Utente):
-            return print(Module_Utente)
+    def vedere_utente(self, Utente):
+        with open('Lista_Utente.txt', 'r') as file:
+            if Utente in self.lista_Utente:   #vede l'utente dal file
+                file.read(Utente in self.lista_Utente)
+    def inserire_Utente(self, Utente):
+        with open('Lista_Utente.txt', 'a') as file:
+            self.lista_Utente.append(Utente)  #inserisce l'utente nel file
+            file.write(self.lista_Utente)
 
-    def change_utente(Module_Utente):
-        #importare da database metodo che cambia il file
-         Module_Utente.nome = input("Nome utente: ")
-         Module_Utente.email = input("Email utente: ")
-         Module_Utente.password = input("<PASSWORD>: ")
-         return print("Utente modificato")
+    def eliminare_Utente(self, Utente):
+        with open('Lista_Utente.txt', 'w') as file:
+            if Utente in self.lista_Utente: #elimina l'utente dal file
+                self.lista_Utente.remove(Utente)
+                file.write(self.lista_Utente)
+    def change_utente(self, Utente, new_Utente):
+         with open('Lista_Utente.txt', 'w') as file:
+             self.lista_Utente.remove(Utente)   #cambia l'utente nella lista
+             self.lista_Utente.append(new_Utente)
+             file.write(self.lista_Utente)
 
-    def remove_utente(Module_Utente):
-         #importare da database metodo che elimina sul file
-         return print("Utente eliminato")
-
-    def create_utente(Module_Utente):
-         Module_Utente.name = input("Nome utente: ")
-         Module_Utente.email = input("Email utente: ")
-         Module_Utente.password = input("<PASSWORD>: ")
-         return print("Utente creato")

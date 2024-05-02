@@ -4,7 +4,8 @@ import Database
 #esempio di controller
 class Controller_Admin:
     def __init__(self):
-        self.controller = Database()#non ha senso
+        self.lista_Admin = []
+
     def vedere_utente(utente):
         return print(utente)
 
