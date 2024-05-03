@@ -7,9 +7,10 @@ class Model_Admin:
          self.age = age
          self.email = email
          self.password = password
-         Database.dump(self, 'proprietario')
 
 
+    def get_Admin(self):
+         return {"name": self.name, "age": self.age, "email": self.email, "password": self.password} #creo dizionario
 
 
 

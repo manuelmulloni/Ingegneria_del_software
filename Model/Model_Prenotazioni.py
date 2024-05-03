@@ -4,14 +4,15 @@ import Database
 
 
 class Model_Prenotazioni():
-    def __init__(self, username, data, Module_Parruchiere, taglio):
+    def __init__(self, username, data, parruchiere, taglio):
         self.username = username
         self.data = data
-        self.parruchiere = Module_Parruchiere
+        self.parruchiere = parruchiere
         self.taglio = taglio
-        Database.dump(self) #metododa vedere
 
 
 
-    def __str__(self):
-        return f'{self.username} {self.data} {self.parruchiere} {self.taglio}'
+
+    def get_Prenotazioni(self):
+        return {"username": self.username, "data": self.data, "parruchiere": self.parruchiere,
+                "taglio": self.taglio}
