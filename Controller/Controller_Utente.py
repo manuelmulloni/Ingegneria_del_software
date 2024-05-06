@@ -29,3 +29,8 @@ class Controller_Utente:
              self.lista_Utente.append(new_Utente)
              pickle.dump(self.lista_Utente, file)
 
+    def check_credentials(self, username, password):
+        for user in self.lista_Utente:
+            if user['username'] == username and user['password'] == password:
+                return True
+        return False #controlla le credenziali dell'utente

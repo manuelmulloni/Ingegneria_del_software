@@ -7,6 +7,8 @@ class model_Segretaria():
         self.password = password
 
 
-    def get_info_Utente(self):
+    def get_info_Segretaria(self):
         return {"id": self.id,
                 "password": self.password}  #creo dict
+
+
