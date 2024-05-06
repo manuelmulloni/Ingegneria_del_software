@@ -34,9 +34,10 @@ class LoginPage(QWidget):
         username = self.username_input.text()
         password = self.password_input.text()
 
-        if self.controller_utente.check_credentials(username, password):  #controlla le credenziali usando il controller utente
+
+        if self.controller_utente.check_credentials(username, password):
             print('Access granted')
-            self.view_utente = view_Utente()# se lecredenziali sono giuste apre la pagina utente
-            self.view_utente.show()
+            self.view_Utente = view_Utente(username)
+            self.view_Utente.show()
         else:
             print('Access denied')

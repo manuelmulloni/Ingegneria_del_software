@@ -1,14 +1,16 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+from Controller.Controller_Utente import Controller_Utente
 
 class view_Utente(QWidget):
-    def __init__(self):
+    def __init__(self, username):  #crea la finestra utente con il nome dell'utente che vuole fare la prenotazione
         super().__init__()
+        self.controller_utente = Controller_Utente()
 
         self.setWindowTitle('User Page')
 
         self.layout = QVBoxLayout()
 
-        self.welcome_label = QLabel('Welcome, user!')
+        self.welcome_label = QLabel('Welcome, ' + username + '!') # crea la label con il nome dell'utente che ha fatto l'accesso
         self.reservation_button = QPushButton('Make a reservation')
         self.reservation_button.clicked.connect(self.make_reservation)
 
