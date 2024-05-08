@@ -7,10 +7,12 @@ class Model_Admin:
          self.age = age
          self.email = email
          self.password = password
+         self.user_type = "admin"
 
 
     def get_Admin(self):
-         return {"name": self.name, "age": self.age, "email": self.email, "password": self.password} #creo dizionario
+         return {"name": self.name, "age": self.age, "email": self.email, "password": self.password,
+                 "user_type": self.user_type} #creo dizionario
 
 
 
