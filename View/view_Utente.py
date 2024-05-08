@@ -80,3 +80,4 @@ class view_Utente(QWidget):
         print('Making a reservation')
         self.reservation_dialog = ReservationDialog(username) #inserisco un parametro username quando faccio la prenotazione
         self.reservation_dialog.exec()
+
