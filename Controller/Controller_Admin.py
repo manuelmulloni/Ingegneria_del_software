@@ -2,35 +2,42 @@ import Database
 import Controller_Utente
 import Controller_Prenotazioni
 import pickle
-
+import os
 
 class Controller_Admin:
     def __init__(self):
         self.lista_Admin = []
+        self.pickle_file_name = 'Lista_Admin.pickle'
+        self.database_dir = os.getenv('Database', default='.')
 
 
     def inserisci_Admin(self, dict):
-        with open('Database\Lista_Admin.pickle', 'wb') as f:
+        pickle_file_path = Path(self.database_dir) / self.pickle_file_name
+        with open(pickle_file_path, 'wb') as f:
             self.lista_Admin.append(dict)
             pickle.dump(self.lista_Admin, f)
 
     def leggi_Admin(self):
-        with open('Database\Lista_Admin.pickle', 'rb') as f:
+        pickle_file_path = Path(self.database_dir) / self.pickle_file_name
+        with open(pickle_file_path, 'rb') as f:
             return print(pickle.load(f))
 
     def elimina_Admin(self, dict):
-        with open('Database\Lista_Admin.pickle', 'wb') as f:
+        pickle_file_path = Path(self.database_dir) / self.pickle_file_name
+        with open(pickle_file_path, 'wb') as f:
             self.lista_Admin.remove(dict)
             pickle.dump(self.lista_Admin,f)
 
     def cambia_Admin(self, dict, new):
-        with open('Database\Lista_Admin.pickle', 'wb') as f:
+        pickle_file_path = Path(self.database_dir) / self.pickle_file_name
+        with open(pickle_file_path, 'wb') as f:
             self.lista_Admin.remove(dict)
             self.lista_Admin.append(new)
             pickle.dump(self.lista_Admin,f)
 
     def elimina_utente(self, dict):
-        with open('Database\Lista_Utente.pickle', 'wb') as f:
+        pickle_file_path = Path(self.database_dir) / self.pickle_file_name
+        with open(pickle_file_path, 'wb') as f:
             self.lista_Utente.remove(dict)
             pickle.dump(self.lista_Utente,f)
 

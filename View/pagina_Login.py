@@ -1,5 +1,6 @@
 import pickle
-
+import os
+from pathlib import Path
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLineEdit, QLabel
 from Controller.Controller_Utente import Controller_Utente
@@ -13,7 +14,7 @@ class LoginPage(QWidget):
         super().__init__()
 
         self.controller_utente = Controller_Utente() #inizializza il controller utente
-        self.controller_utente.lista_Utente = pickle.load(open('C:\\Users\\manue\\Documents\\GitHub\\Ingegneria_del_software\\Database\\Lista_Utenti.pickle', 'rb'))
+        self.controller_utente.lista_Utente = pickle.load(open(self.controller_utente.pickle_file_path, 'rb'))
         self.setWindowTitle('Login Page')
 
         # Set up background image
