@@ -1,75 +1,72 @@
-import pickle
-import os
-from pathlib import Path
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLineEdit, QLabel
-from Controller.Controller_Utente import Controller_Utente
-from View.view_Utente import view_Utente
-from Model.Model_Utente import Model_Utente
-import immagini
-import Database
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit
+import sys
 
-class LoginPage(QWidget):
+import view_Utente
+from Controller import Controller_Utente
+
+
+class pagina_Login(QWidget):
     def __init__(self):
         super().__init__()
+        self.user_controller = Controller_Utente.Controller_Utente("C:\\Users\\manue\\Documents\\GitHub\\Ingegneria_del_software\\Database\\Lista_Utenti.pickle")
+        self.setWindowTitle("Login")
 
-        self.controller_utente = Controller_Utente() #inizializza il controller utente
-        self.controller_utente.lista_Utente = pickle.load(open(self.controller_utente.pickle_file_path, 'rb'))
-        self.setWindowTitle('Login Page')
+        layout = QVBoxLayout()
 
-        # Set up background image
-        self.background_label = QLabel(self)
-
-        self.layout = QVBoxLayout()
-
-        self.username_label = QLabel('Username')
+        self.username_label = QLabel("Username")
         self.username_input = QLineEdit()
 
-        self.password_label = QLabel('Password')
+        self.password_label = QLabel("Password")
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
 
-        self.login_button = QPushButton('Login')
+        self.login_button = QPushButton("Login")
         self.login_button.clicked.connect(self.check_credentials)
-        self.create_account_button = QPushButton('Crea Account')
-        self.create_account_button.clicked.connect(self.crea_account)
 
-        self.layout.addWidget(self.username_label)
-        self.layout.addWidget(self.username_input)
-        self.layout.addWidget(self.password_label)
-        self.layout.addWidget(self.password_input)
-        self.layout.addWidget(self.login_button)
-        self.layout.addWidget(self.create_account_button)
-        self.setLayout(self.layout)
+        self.create_account_button = QPushButton("Crea Account")
+        self.create_account_button.clicked.connect(self.create_account)
+
+        layout.addWidget(self.username_label)
+        layout.addWidget(self.username_input)
+        layout.addWidget(self.password_label)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.login_button)
+        layout.addWidget(self.create_account_button)
+
+        self.setLayout(layout)
+
+
 
     def check_credentials(self):
         username = self.username_input.text()
-        password = self.password_input.text()
+        password = self.password_input.text()    #vede se l'utente esiste e se la password è corretta
 
-        if self.controller_Admin.check_credentials(username, password):
-            print('Access granted')
-
-        elif self.controller_utente.check_credentials(username, password):
-            print('Access granted')
-            self.pagina_Utente = view_Utente(username)
-            self.pagina_Utente.show()
+        if self.user_controller.user_exists(username):
+            user = self.user_controller.get_user(username)
+            if user.password == password:
+                self.user_view = view_Utente.view_Utente(username)
+                self.user_view.show()
+            else:
+                print("Incorrect password!")
         else:
-            print('Access denied')
+            print("User does not exist!")
 
-    def crea_account(self):
+    def create_account(self):
         username = self.username_input.text()
-        password = self.password_input.text()
+        password = self.password_input.text()  #crea un nuovo account ma se l'username esiste già non lo crea
 
-        nuovo = Model_Utente(username, password)
-        dict_Utente = nuovo.get_info_Utente() # nonso perche non scirve sul file
-        self.controller_utente.inserire_Utente(dict_Utente)
+        if not self.user_controller.user_exists(username):
+            self.user_controller.create_user(username, password)
+            print("Account creato con successo!")
+            self.view = view_Utente.view_Utente(username)
+            self.view.show()
+        else:
+            print("Username già esistente!")
 
-        print(f'Account creato per {username}')
-        self.prenotazione = view_Utente(username)
-        self.prenotazione.show()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
 
-if __name__ == '__main__':
-    app = QApplication([])
-    window = LoginPage()
-    window.show()
-    app.exec()
+    login_window = pagina_Login()
+    login_window.show()
+
+    sys.exit(app.exec())

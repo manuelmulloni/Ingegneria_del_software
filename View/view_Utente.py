@@ -1,83 +1,117 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit, QDialog, QDateEdit
-from Controller.Controller_Utente import Controller_Utente
-from Controller.Controller_Prenotazioni import Controller_Prenotazioni
-from Model.Model_Prenotazioni import Model_Prenotazioni
-class ReservationDialog(QDialog):
-    def __init__(self,username):
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QGroupBox, QGridLayout, QDialog, QDateEdit, QComboBox, QLineEdit
+
+from Controller import Controller_Utente
+import pagina_Login
+
+class BookingDialog(QDialog):
+    def __init__(self):
         super().__init__()
-        self.prenotazioni = Controller_Prenotazioni()
-        self.nome = username #dato che ho ilcostruttore con username che ho preso dalla pagina di login do il nome della persona che prenota direttamente
-        self.layout = QVBoxLayout()
-        self.setGeometry(100, 100, 400, 200)
 
+        layout = QVBoxLayout()
 
-        self.date_label = QLabel('Data')
+        self.date_label = QLabel("Data")
         self.date_input = QDateEdit()
 
-        self.parrucchiere_label = QLabel('Parrucchiere')
-        self.parrucchiere_input = QComboBox()
-        # Aggiungi qui le opzioni per il parrucchiere
+        self.service_label = QLabel("Servizio")
+        self.service_input = QLineEdit()
 
-        self.taglio_label = QLabel('Servizio')
-        self.taglio_input = QComboBox()
-        self.taglio_input.addItem('Taglio')
-        self.taglio_input.addItem('Colore')
-        self.taglio_input.addItem('Piega')
+        self.hairdresser_label = QLabel("Parrucchiere")
+        self.hairdresser_input = QLineEdit()
 
-        self.prenota = QPushButton('Prenota')
-        self.prenota.clicked.connect(self.inserisci_prenotazione())
+        self.confirm_button = QPushButton("Conferma")
+        self.confirm_button.clicked.connect(self.confirm_booking)
+
+        layout.addWidget(self.date_label)
+        layout.addWidget(self.date_input)
+        layout.addWidget(self.service_label)
+        layout.addWidget(self.service_input)
+        layout.addWidget(self.hairdresser_label)
+        layout.addWidget(self.hairdresser_input)
+        layout.addWidget(self.confirm_button)
+
+        self.setLayout(layout)
+
+    def confirm_booking(self):
+        # Qui dovresti implementare la logica per confermare la prenotazione
+        # Per ora, stampiamo solo un messaggio di conferma
+        print("Prenotazione confermata!")
 
 
+class ProfileDialog(QDialog):
+    def __init__(self, username):
+        super().__init__()
 
+        self.username = username
+        self.user_controller = Controller_Utente.Controller_Utente("C:\\Users\\manue\\PycharmProjects\\pythonProject1\\database.pickle")
 
-        self.layout.addWidget(self.date_label)
-        self.layout.addWidget(self.date_input)
-        self.layout.addWidget(self.parrucchiere_label)
-        self.layout.addWidget(self.parrucchiere_input)
-        self.layout.addWidget(self.taglio_label)
-        self.layout.addWidget(self.taglio_input)
-        self.layout.addWidget(self.prenota)
-        self.setLayout(self.layout)
+        layout = QVBoxLayout()
 
-    def inserisci_prenotazione(self):
-        data = self.date_input.date().toString('dd/MM/yyyy')
-        parrucchiere = self.parrucchiere_input.currentText()
-        tipo_taglio = self.taglio_input.currentText()   #scegli nella combo box i ltipo di prenotazione e la inserisce nel file prenotazioni
-        prenotazione = Model_Prenotazioni(self.nome, data, parrucchiere, tipo_taglio)
-        dict_prenotazione = prenotazione.get_Prenotazioni()
-        self.prenotazioni.insert(dict_prenotazione)
+        self.username_label = QLabel("Username")
+        self.username_input = QLineEdit()
+        self.username_input.setText(self.username)
+
+        self.password_label = QLabel("Password")
+        self.password_input = QLineEdit()
+
+        self.change_button = QPushButton("Cambia")
+        self.change_button.clicked.connect(self.change_profile)
+
+        self.delete_button = QPushButton("Cancella")
+        self.delete_button.clicked.connect(self.delete_profile)
+
+        layout.addWidget(self.username_label)
+        layout.addWidget(self.username_input)
+        layout.addWidget(self.password_label)
+        layout.addWidget(self.password_input)
+        layout.addWidget(self.change_button)
+        layout.addWidget(self.delete_button)
+
+        self.setLayout(layout)
+
+    def change_profile(self):
+        new_password = self.password_input.text()
+        self.user_controller.update_user(self.username, new_password)
+        print("Profilo cambiato con successo!")
+
+    def delete_profile(self):
+        self.user_controller.delete_user(self.username)
+        print("Profilo cancellato con successo!")
+        self.close()
 
 class view_Utente(QWidget):
     def __init__(self, username):
         super().__init__()
-        self.controller_utente = Controller_Utente()
         self.username = username
+        self.setWindowTitle("User View")
 
-        self.setWindowTitle('User Page')
-        self.layout = QVBoxLayout()
+        layout = QVBoxLayout()
 
-        self.menu = QComboBox()
-        self.menu.addItem('Profilo')
-        self.menu.addItem('Prenotazione')
-        self.menu.currentIndexChanged.connect(self.selectionchange)
+        self.greeting_label = QLabel(f"Welcome, {username}!")
 
-        self.layout.addWidget(self.menu)
+        self.group_box = QGroupBox("Opzioni")
+        group_layout = QGridLayout()
 
-        self.setLayout(self.layout)
+        self.booking_button = QPushButton("Prenota")
+        self.booking_button.clicked.connect(self.book_appointment)
 
-    def selectionchange(self, i):
-        if self.menu.currentText() == 'Profilo':
-            self.show_profilo()
-        elif self.menu.currentText() == 'Prenotazione':
-            self.make_reservation()
+        self.profile_button = QPushButton("Profilo")
+        self.profile_button.clicked.connect(self.view_profile)
 
-    def show_profilo(self):
-        # Here you can add the logic to show the user profile
-        print('Showing user profile')
+        group_layout.addWidget(self.booking_button, 0, 0)
+        group_layout.addWidget(self.profile_button, 0, 1)
 
-    def make_reservation(self,username):
-        # Here you can add the logic to make a reservation
-        print('Making a reservation')
-        self.reservation_dialog = ReservationDialog(username) #inserisco un parametro username quando faccio la prenotazione
-        self.reservation_dialog.exec()
+        self.group_box.setLayout(group_layout)
+
+        layout.addWidget(self.greeting_label)
+        layout.addWidget(self.group_box)
+
+        self.setLayout(layout)
+
+    def book_appointment(self):
+        self.booking_dialog = BookingDialog()
+        self.booking_dialog.show()
+
+    def view_profile(self):
+        self.profile_dialog = ProfileDialog(self.username)
+        self.profile_dialog.show()
 

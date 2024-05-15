@@ -1,19 +1,12 @@
-
-
-
-class Model_Utente():
-    def __init__(self,username,password):
+class Model_Utente:
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.user_type = 'Utente'   #inizializzo le variabili
+        self.to_dict()
 
-    def get_info_Utente(self):
+    def to_dict(self):
         return {
-                "username": self.username,  #creo un dizionario di utente
-                "password": self.password,
-                "user_type": self.user_type
-                }
-
-
-
-
+            'username': self.username,
+            'password': self.password,
+            'user_type': 'Utente'
+        }
