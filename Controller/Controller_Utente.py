@@ -53,3 +53,7 @@ class Controller_Utente:
                 return pickle.load(db_file)
         except FileNotFoundError:
             return []
+
+    def get_all_users(self):
+        self.users = self.load_from_file()
+        return self.users

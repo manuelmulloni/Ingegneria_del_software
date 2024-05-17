@@ -1,11 +1,13 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QGroupBox, QGridLayout, QDialog, QDateEdit, QComboBox, QLineEdit
-
-from Controller import Controller_Utente
+from Model import Model_Prenotazioni
+from Controller import Controller_Utente, Controller_Prenotazioni
 import pagina_Login
 
 class BookingDialog(QDialog):
-    def __init__(self):
+    def __init__(self,username):
         super().__init__()
+        self.username = username
+        self.bookings_controller = Controller_Prenotazioni.Controller_Prenotazioni("C:\\Users\\manue\\Documents\\GitHub\\Ingegneria_del_software\\Database\\Prenotazioni.pickle")
 
         layout = QVBoxLayout()
 
@@ -32,8 +34,12 @@ class BookingDialog(QDialog):
         self.setLayout(layout)
 
     def confirm_booking(self):
-        # Qui dovresti implementare la logica per confermare la prenotazione
-        # Per ora, stampiamo solo un messaggio di conferma
+        date = self.date_input.date().toString("dd/MM/yyyy")
+        service = self.service_input.text()
+        hairdresser = self.hairdresser_input.text()
+
+        self.bookings_controller.create_booking(self.username, date, hairdresser, service)
+
         print("Prenotazione confermata!")
 
 
@@ -108,10 +114,15 @@ class view_Utente(QWidget):
         self.setLayout(layout)
 
     def book_appointment(self):
-        self.booking_dialog = BookingDialog()
+        self.booking_dialog = BookingDialog(self.username)
         self.booking_dialog.show()
 
     def view_profile(self):
         self.profile_dialog = ProfileDialog(self.username)
         self.profile_dialog.show()
 
+if __name__ == '__main__':
+    app = QApplication([])
+    window = view_Utente("manu")
+    window.show()
+    app.exec()

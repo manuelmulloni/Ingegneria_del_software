@@ -1,14 +1,15 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit
 import sys
-
 import view_Utente
-from Controller import Controller_Utente
+import view_Admin
+from Controller import Controller_Utente, Controller_Admin
 
 
 class pagina_Login(QWidget):
     def __init__(self):
         super().__init__()
         self.user_controller = Controller_Utente.Controller_Utente("C:\\Users\\manue\\Documents\\GitHub\\Ingegneria_del_software\\Database\\Lista_Utenti.pickle")
+        self.admin_controller = Controller_Admin.Controller_Admin("C:\\Users\\manue\\Documents\\GitHub\\Ingegneria_del_software\\Database\\Lista_Admin.pickle")
         self.setWindowTitle("Login")
 
         layout = QVBoxLayout()
@@ -37,15 +38,24 @@ class pagina_Login(QWidget):
 
 
 
+
     def check_credentials(self):
         username = self.username_input.text()
-        password = self.password_input.text()    #vede se l'utente esiste e se la password è corretta
+        password = self.password_input.text()
 
         if self.user_controller.user_exists(username):
             user = self.user_controller.get_user(username)
             if user.password == password:
                 self.user_view = view_Utente.view_Utente(username)
                 self.user_view.show()
+            else:
+                print("Incorrect password!")
+        elif self.admin_controller.user_exists(username):
+            admin = self.admin_controller.get_user(username)
+            if admin.password == password:
+                print("Admin logged in!")
+                self.admin_view = view_Admin.view_Admin()
+                self.admin_view.show()
             else:
                 print("Incorrect password!")
         else:
