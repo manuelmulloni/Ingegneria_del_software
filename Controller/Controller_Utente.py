@@ -11,7 +11,7 @@ class Controller_Utente:
     def initialize_user(self):
         if os.path.getsize(self.db_path) == 0: #se il file è vuoto scrive nel file l'utente di default
             with open(self.db_path, 'wb') as db_file:
-                pickle.dump(Model_Utente.Model_Utente('Utente', 'Utente'), db_file)
+                pickle.dump(Model_Utente.Model_Utente('Utente', 'prenota'), db_file)
         else:
             self.users = self.load_from_file() #altrimneti carica il file
 

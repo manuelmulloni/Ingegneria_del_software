@@ -11,7 +11,7 @@ class Controller_Admin:
     def initialize_user(self):
         if os.path.getsize(self.db_path) == 0:  # se il file è vuoto scrive nel file l'utente di default
             with open(self.db_path, 'wb') as db_file:
-                pickle.dump(Model_Admin.Model_Admin('admin', 'admin'), db_file)
+                pickle.dump(Model_Admin.Model_Admin('admin', 'parrucca'), db_file)
         else:
             self.admins = self.load_from_file()  # altrimneti carica il file
 
@@ -22,19 +22,19 @@ class Controller_Admin:
 
     def user_exists(self, username):
         for Model_Admin in self.admins:
-            if Model_Admin.username == username:
+            if Model_Admin.Username == username: #non funziona errore stack ovwerflow
                 return True
         return False
 
     def get_user(self, username):
         for Model_Admin in self.admins:
-            if Model_Admin.username == username:
-                return Model_Admin
+            if Model_Admin.Username == username:
+                return dict
         return None
 
     def update_user(self, username, new_password):
         for Model_Admin in self.admins:
-            if Model_Admin.username == username:
+            if Model_Admin.Username == username:
                 Model_Admin.password = new_password
                 self.save_to_file()
                 return

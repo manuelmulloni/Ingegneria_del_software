@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit
 import sys
 import view_Utente
-import view_Admin
+
+import prova_view
 from Controller import Controller_Utente, Controller_Admin
 
 
@@ -42,20 +43,19 @@ class pagina_Login(QWidget):
     def check_credentials(self):
         username = self.username_input.text()
         password = self.password_input.text()
-
-        if self.user_controller.user_exists(username):
+        print("Checking credentials...")
+        if self.admin_controller.user_exists(username):
+            print("Admin exists!")
+            admin = self.admin_controller.get_user(username)
+            if admin.Password == password and admin.User_type == "Admin":
+                print("Admin logged in!")
+                self.admin_view = prova_view.prova_view()
+                self.admin_view.show()
+        elif self.user_controller.user_exists(username):
             user = self.user_controller.get_user(username)
             if user.password == password:
                 self.user_view = view_Utente.view_Utente(username)
                 self.user_view.show()
-            else:
-                print("Incorrect password!")
-        elif self.admin_controller.user_exists(username):
-            admin = self.admin_controller.get_user(username)
-            if admin.password == password:
-                print("Admin logged in!")
-                self.admin_view = view_Admin.view_Admin()
-                self.admin_view.show()
             else:
                 print("Incorrect password!")
         else:
